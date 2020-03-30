@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Exercise2</string>
+    <string name="oi">Oi!</string>
+    <string name="trocarUsuario">Trocar usuário</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="cancelar">Cancelar</string>
 </resources>
