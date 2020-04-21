@@ -1,67 +1,58 @@
 package br.com.mariojp.exercise2;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class OutraActivity extends AppCompatActivity {
 
-    private String usuarioAtual = "";
+    private EditText editTextUserName;
+    private Button confirmar;
+    private Button cancelar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outra);
 
-        TextView novoNome = (TextView) findViewById(R.id.editText);
+        editTextUserName = findViewById(R.id.editTextUserName);
+        confirmar = findViewById(R.id.btnConfirmar);
+        cancelar = findViewById(R.id.btnCancelar);
 
-        if (savedInstanceState!=null) {
-            novoNome.setText(savedInstanceState.getString("nomeAtual"));
-        } else {
-            novoNome.setText(new String());
-        }
+        Intent intent = getIntent();
+        final String usuarioLogado = intent.getStringExtra("usuarioLogado");
+        editTextUserName.setText(usuarioLogado);
 
+        confirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = editTextUserName.getText().toString();
+                if(name.equals("")) {
+                    Intent it = new Intent(OutraActivity.this, MainActivity.class);
+                    it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    it.putExtra("mensagem", "");
+                    startActivity(it);
+                }else {
+                    Intent it = new Intent(OutraActivity.this, MainActivity.class);
+                    it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    it.putExtra("mensagem", editTextUserName.getText().toString());
+                    startActivity(it);
+                }
+            }
+        });
 
-        Intent outraIntent = getIntent();
-        String nomeAtual = outraIntent.getStringExtra("atual");
-        usuarioAtual = nomeAtual;
-        novoNome.setText(nomeAtual);
-
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(OutraActivity.this, MainActivity.class);
+                it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                it.putExtra("mensagem", usuarioLogado);
+                startActivity(it);
+            }
+        });
     }
-
-    public void clickConfirmar(View butao){
-        Intent intent = new Intent(OutraActivity.this, MainActivity.class);
-
-        TextView novoNome = (TextView) findViewById(R.id.editText);
-
-        intent.putExtra("novoNome", novoNome.getText().toString());
-        startActivity(intent);
-    }
-
-    public void clickCancelar(View butao){
-        Intent intent = new Intent(OutraActivity.this, MainActivity.class);
-        TextView novoNome = (TextView) findViewById(R.id.editText);
-
-        novoNome.setText("");
-
-        intent.putExtra("novoNome", usuarioAtual);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        TextView novoNome = (TextView) findViewById(R.id.editText);
-        outState.putString("nomeAtual", novoNome.getText().toString());
-    }
-
-//    @Override
-//    public void onRestoreInstanceState(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-//        super.onRestoreInstanceState(savedInstanceState, persistentState);
-//    }
 }
